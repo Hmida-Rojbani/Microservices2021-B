@@ -1,8 +1,13 @@
 package de.tekup.user.service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import de.tekup.user.data.models.UserEntity;
@@ -12,7 +17,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService{
 	
 	private ModelMapper mapper;
 	private UserRepository repository;
@@ -24,6 +29,18 @@ public class UserService {
 		UserEntity entitySaved= repository.save(entity);
 		
 		return mapper.map(entitySaved, UserDTO.class);
+	}
+	
+	public UserDTO findUserByUsername(String email) {
+		UserEntity user = repository.findByEmail(email)
+								.orElseThrow(()->new UsernameNotFoundException("Username not found"));
+		return mapper.map(user, UserDTO.class);
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		UserDTO dto = findUserByUsername(username);
+		return new User(dto.getEmail(), dto.getPassword(), true, true, true, true, new ArrayList<>());
 	}
 
 }
