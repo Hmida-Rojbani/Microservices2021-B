@@ -23,7 +23,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable();
 		// accept all request
-		//http.authorizeRequests().antMatchers("/**").permitAll();
+		http.authorizeRequests().antMatchers("/api/users/register").permitAll();
 		// accept only the gateway requests 
 		http.authorizeRequests().antMatchers("/**")
 								.hasIpAddress(env.getProperty("gateway.ip"))

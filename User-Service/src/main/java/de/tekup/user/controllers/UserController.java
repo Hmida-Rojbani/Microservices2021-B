@@ -25,7 +25,7 @@ public class UserController {
 		return "User service works on "+env.getProperty("local.server.port");
 	}
 	
-	@PostMapping
+	@PostMapping("/register")
 	public ResponseEntity<String> saveUser(@RequestBody UserDTO userDTO){
 		UserDTO user = userService.saveUserToDB(userDTO);
 		if(user!=null)

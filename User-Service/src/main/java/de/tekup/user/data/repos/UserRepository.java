@@ -8,4 +8,5 @@ import de.tekup.user.data.models.UserEntity;
 
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	Optional<UserEntity> findByEmail(String email);
+	Optional<UserEntity> findByUserId(String userID);
 }
